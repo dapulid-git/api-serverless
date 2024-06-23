@@ -11,9 +11,9 @@ export const putItemHandler = async (event) => {
         throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);
     }*/
 
-    /*const body = JSON.parse(event.body);
+    const body = JSON.parse(event.body);
 
-    const id = body.id;
+    /*const id = body.id;
     const name = body.name;
 
     var params = {
@@ -32,7 +32,7 @@ export const putItemHandler = async (event) => {
         body: JSON.stringify(body)
     };*/
 
-    const id = event.pathParameters.id;
+    const id = body.id;
     const response = {};
 
     var params = {
