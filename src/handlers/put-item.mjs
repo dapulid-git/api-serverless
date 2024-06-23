@@ -16,23 +16,44 @@ export const putItemHandler = async (event) => {
     const id = body.id;
     const name = body.name;
 
+    const response = {};
+
+    var getUserByIdParams = {
+        TableName: tableName,
+        Key: { id: id },
+    };
+
     var params = {
         TableName: tableName,
         Item: { id: id, name: name }
     };
 
     try {
-        const data = await ddbDocClient.send(new PutCommand(params));
+        const requestUserId = await ddbDocClient.send(new GetCommand(getUserByIdParams));
+
+        if (requestUserId.Item.id === id) {
+            response = {
+                statusCode: 400,
+                body: {
+                    title: "Bad Request",
+                    description: `user with id ${JSON.stringify(body.id)} is already created`
+                }
+            }
+        } else {
+            const data = await ddbDocClient.send(new PutCommand(params));
+
+            response = {
+                statusCode: 200,
+                body: {
+                    title: "OK",
+                    description: `User: ${JSON.stringify(body.name)} created successfully`
+                }
+            };
+
+        }
     } catch (err) {
-        throw new Error(err.stack);
+        console.log("Error", err);
     }
 
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify(body)
-    };
-
-    // All log statements are written to CloudWatch
-    console.info(`response from: ${event.path} statusCode: ${response.statusCode} body: ${response.body}`);
     return response;
 };

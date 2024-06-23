@@ -1,0 +1,60 @@
+openapi: 3.0.3
+info:
+  title: Swagger Serverless API - OpenAPI 3.0
+  description: Serverless API
+  version: 1.0.0
+
+paths:
+  /addUser:
+    post:
+      summary: add user
+      requestBody:
+        description: add user body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestUserBody'
+        required: true
+      responses:
+        '201':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessfulResponse'          
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+components:
+  schemas:
+    RequestUserBody:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          description: user id
+          example: "1"
+        name:
+          type: string
+          description: user name
+          example: "David" 
+    SuccessfulResponse:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Successful response messagge 
+          example: "User created successfully"
+    BadRequestResponse:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Bad request response messagge 
+          example: "Error in message body"
