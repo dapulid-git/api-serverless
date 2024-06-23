@@ -1,5 +1,5 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 
 const client = new DynamoDBClient({});
 const ddbDocClient = DynamoDBDocumentClient.from(client);
@@ -22,7 +22,7 @@ export const putItemHandler = async (event) => {
     };
 
     try {
-        const data = await ddbDocClient.send(new PutCommand(params));
+        const data = await ddbDocClient.put(params);
     } catch (err) {
         throw new Error(err.stack);
     }
