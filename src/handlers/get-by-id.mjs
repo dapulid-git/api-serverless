@@ -14,6 +14,7 @@ export const getByIdHandler = async (event) => {
   console.info('received:', event);
 
   const id = event.pathParameters.id;
+  const response = {};
 
   var params = {
     TableName: tableName,
@@ -27,7 +28,7 @@ export const getByIdHandler = async (event) => {
     console.log("Error", err);
   }
 
-  const response = {
+  response = {
     statusCode: 200,
     body: JSON.stringify(item)
   };
