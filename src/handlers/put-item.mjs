@@ -1,5 +1,5 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
 
 const client = new DynamoDBClient({});
 const ddbDocClient = DynamoDBDocumentClient.from(client);
@@ -7,13 +7,13 @@ const ddbDocClient = DynamoDBDocumentClient.from(client);
 const tableName = process.env.SAMPLE_TABLE;
 
 export const putItemHandler = async (event) => {
-    /*if (event.httpMethod !== 'POST') {
+    if (event.httpMethod !== 'POST') {
         throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);
-    }*/
+    }
 
     const body = JSON.parse(event.body);
 
-    /*const id = body.id;
+    const id = body.id;
     const name = body.name;
 
     var params = {
@@ -30,26 +30,6 @@ export const putItemHandler = async (event) => {
     const response = {
         statusCode: 200,
         body: JSON.stringify(body)
-    };*/
-
-    const id = body.id;
-    const response = {};
-
-    var params = {
-        TableName: tableName,
-        Key: { id: id },
-    };
-
-    try {
-        const data = await ddbDocClient.send(new GetCommand(params));
-        var item = data.Item;
-    } catch (err) {
-        console.log("Error", err);
-    }
-
-    response = {
-        statusCode: 200,
-        body: JSON.stringify(item)
     };
 
     return response;
