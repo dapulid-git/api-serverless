@@ -4,7 +4,7 @@ import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 const client = new DynamoDBClient({});
 const ddbDocClient = DynamoDBDocument.from(client);
 
-const tableName = process.env.SAMPLE_TABLE;
+const tableName = process.env.USER_TABLE;
 
 export const putItemHandler = async (event) => {
     if (event.httpMethod !== 'POST') {
@@ -24,7 +24,10 @@ export const putItemHandler = async (event) => {
 
     var putParams = {
         TableName: tableName,
-        Item: { id: id, name: name }
+        Item: {
+            id: id,
+            name: name
+        }
     };
 
     try {

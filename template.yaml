@@ -17,10 +17,10 @@ Resources:
       Description: A simple example includes a HTTP get method to get all items from a DynamoDB table.
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: !Ref SampleTable
+            TableName: !Ref UserTable
       Environment:
         Variables:
-          SAMPLE_TABLE: !Ref SampleTable
+          USER_TABLE: !Ref UserTable
       Events:
         Api:
           Type: Api
@@ -40,10 +40,10 @@ Resources:
       Description: A simple example includes a HTTP get method to get one item by id from a DynamoDB table.
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: !Ref SampleTable
+            TableName: !Ref UserTable
       Environment:
         Variables:
-          SAMPLE_TABLE: !Ref SampleTable
+          USER_TABLE: !Ref UserTable
       Events:
         Api:
           Type: Api
@@ -63,10 +63,10 @@ Resources:
       Description: A simple example includes a HTTP post method to add one item to a DynamoDB table.
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: !Ref SampleTable
+            TableName: !Ref UserTable
       Environment:
         Variables:
-          SAMPLE_TABLE: !Ref SampleTable
+          USER_TABLE: !Ref UserTable
       Events:
         Api:
           Type: Api
@@ -121,9 +121,10 @@ Resources:
             Method: GET
 
 
-  SampleTable:
+  UserTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
+      TableName: User
       PrimaryKey:
         Name: id
         Type: String

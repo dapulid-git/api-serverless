@@ -4,7 +4,7 @@ import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
 const client = new DynamoDBClient({});
 const ddbDocClient = DynamoDBDocumentClient.from(client);
 
-const tableName = process.env.SAMPLE_TABLE;
+const tableName = process.env.USER_TABLE;
 
 export const getByIdHandler = async (event) => {
   if (event.httpMethod !== 'GET') {

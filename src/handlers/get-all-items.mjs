@@ -4,7 +4,7 @@ import { DynamoDBDocumentClient, ScanCommand } from '@aws-sdk/lib-dynamodb';
 const client = new DynamoDBClient({});
 const ddbDocClient = DynamoDBDocumentClient.from(client);
 
-const tableName = process.env.SAMPLE_TABLE;
+const tableName = process.env.USER_TABLE;
 
 export const getAllItemsHandler = async (event) => {
     if (event.httpMethod !== 'GET') {
