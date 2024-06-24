@@ -131,7 +131,7 @@ Resources:
         ReadCapacityUnits: 2
         WriteCapacityUnits: 2
   EventTable:
-    Type: AWS::Serverless::EventTable
+    Type: AWS::Serverless::SimpleTable
     Properties:
       PrimaryKey:
         Name: id
