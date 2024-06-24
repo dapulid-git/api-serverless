@@ -12,31 +12,38 @@ export const putEventHandler = async (event) => {
     }
 
     const body = JSON.parse(event.body);
-    const id = body.id;
+
+    const evn_id = body.evn_id;
+    const usr_id = body.usr_id;
     const name = body.name;
+
     var response = {};
 
     var getParams = {
         TableName: tableName,
-        Key: { id: id }
+        Key: { evn_id: evn_id }
     };
 
     var putParams = {
         TableName: tableName,
-        Item: { id: id, name: name }
+        Item: {
+            evn_id: evn_id,
+            usr_id: usr_id,
+            name: name
+        }
     };
 
     try {
         const getData = await ddbDocClient.get(getParams);
 
         if (getData.Item) {
-            if (getData.Item.id === id) {
+            if (getData.Item.evn_id === evn_id) {
                 response = {
                     statusCode: 400,
                     body: JSON.stringify({
                         title: "Bad Request",
                         code: 400,
-                        detail: `The event with id: ${getData.Item.id} is already registered.`
+                        detail: `The event with id: ${getData.Item.evn_id} is already registered.`
                     })
                 };
             }
@@ -46,7 +53,7 @@ export const putEventHandler = async (event) => {
             response = {
                 statusCode: 201,
                 body: JSON.stringify({
-                    detail: `Event: ${name} with id: ${id} was created successfully`
+                    detail: `Event: ${name} with id: ${evn_id} was created successfully`
                 })
             };
         }
