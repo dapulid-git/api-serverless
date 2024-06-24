@@ -37,6 +37,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequestResponse'
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: "POST"
+        uri: 
+          arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path//2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:putEventFunction/invocations
+        credentials:
+          arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ApiGatewayDefaultRole
+        passthroughBehaviour: "when_no_match"      
 components:
   schemas:
     RequestUserBody:
