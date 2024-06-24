@@ -12,20 +12,20 @@ export const putItemHandler = async (event) => {
     }
 
     const body = JSON.parse(event.body);
-    const id = body.id;
+    const usr_id = body.usr_id;
     const name = body.name;
     var response = {};
 
 
     var getParams = {
         TableName: tableName,
-        Key: { id: id }
+        Key: { usr_id: usr_id }
     };
 
     var putParams = {
         TableName: tableName,
         Item: {
-            id: id,
+            usr_id: usr_id,
             name: name
         }
     };
@@ -34,13 +34,13 @@ export const putItemHandler = async (event) => {
         const getData = await ddbDocClient.get(getParams);
 
         if (getData.Item) {
-            if (getData.Item.id === id) {
+            if (getData.Item.usr_id === usr_id) {
                 response = {
                     statusCode: 400,
                     body: JSON.stringify({
                         title: "Bad Request",
                         code: 400,
-                        detail: `The user with id: ${getData.Item.id} is already registered.`
+                        detail: `The user with id: ${getData.Item.usr_id} is already registered.`
                     })
                 };
             }
@@ -50,7 +50,7 @@ export const putItemHandler = async (event) => {
             response = {
                 statusCode: 201,
                 body: JSON.stringify({
-                    detail: `User: ${name} with id: ${id} was created successfully`
+                    detail: `User: ${name} with id: ${usr_id} was created successfully`
                 })
             };
         }

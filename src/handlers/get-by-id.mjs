@@ -13,12 +13,12 @@ export const getByIdHandler = async (event) => {
 
   console.info('received:', event);
 
-  const id = event.pathParameters.id;
+  const usr_id = event.pathParameters.usr_id;
   const response = {};
 
   var params = {
     TableName: tableName,
-    Key: { id: id },
+    Key: { usr_id: id },
   };
 
   try {
