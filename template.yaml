@@ -7,6 +7,40 @@ Transform:
 
 
 Resources:
+  ApiGatewayDefaultRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ApiGatewayDefaultRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - apigateway.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyName: ExecuteLambdaPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: 'lambda:InvokeFunction'
+                Resource: 
+                  Fn::Sub: "arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:*"
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Dev
+      EndpointConfiguration:
+        Type: REGIONAL
+      DefinitionBody: 
+        'Fn::Transform':
+          Name: 'AWS::Include'
+          Parameters:
+            Location: './api.yaml'
+            
   getAllItemsFunction:
     Type: AWS::Serverless::Function
     Properties:
