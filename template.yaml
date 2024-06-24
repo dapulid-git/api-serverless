@@ -129,7 +129,7 @@ Resources:
         - AttributeName: usr_id
           AttributeType: S
       KeySchema:
-        - AttributeName: evn_id
+        - AttributeName: usr_id
           KeyType: HASH
       ProvisionedThroughput:
         ReadCapacityUnits: 2
