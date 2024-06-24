@@ -32,7 +32,7 @@ Resources:
   ApiGateway:
     Type: AWS::Serverless::Api
     Properties:
-      StageName: Dev
+      StageName: Prod
       EndpointConfiguration:
         Type: REGIONAL
       DefinitionBody: 
@@ -40,7 +40,7 @@ Resources:
           Name: 'AWS::Include'
           Parameters:
             Location: './api.yaml'
-            
+
   getAllItemsFunction:
     Type: AWS::Serverless::Function
     Properties:
