@@ -147,6 +147,9 @@ Resources:
           KeyType: HASH
         - AttributeName: usr_id
           KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
 
 Outputs:
   WebEndpoint:
