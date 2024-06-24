@@ -40,7 +40,7 @@ export const putItemHandler = async (event) => {
                     body: JSON.stringify({
                         title: "Bad Request",
                         code: 400,
-                        detail: `The user with id: ${getData.Item.usr_id} is already registered.`
+                        detail: `User with id: ${getData.Item.usr_id} is already registered.`
                     })
                 };
             }

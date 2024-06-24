@@ -7,26 +7,18 @@ const ddbDocClient = DynamoDBDocument.from(client);
 const tableName = process.env.EVENT_TABLE;
 
 export const putEventHandler = async (event) => {
-    if (event.httpMethod !== 'POST') {
-        throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);
-    }
 
-    const body = JSON.parse(event.body);
-    
-    const usr_id = body.usr_id;
-    const name = body.name;
-    const category = body.category;
+    const { usr_id, name, category } = JSON.parse(event.body);
 
-    var response = {};
-
-    /*var getParams = {
+    var getEventParam = {
         TableName: tableName,
-        Key: { evn_id: evn_id,
-               usr_id: usr_id
+        Key: {
+            usr_id: usr_id,
+            name: name
         }
-    };*/
-    
-    var getParams = {
+    };
+
+    var getAllEventsParams = {
         TableName: tableName,
         KeyConditionExpression: "usr_id = :a",
         ExpressionAttributeValues: {
@@ -38,45 +30,61 @@ export const putEventHandler = async (event) => {
         TableName: tableName,
         Item: {
             usr_id: usr_id,
-            name: name
+            name: name,
+            category: category
         }
     };
 
-    try {
-        const getData = await ddbDocClient.query(getParams);
-        
-        response = {
-                statusCode: 201,
-                body: JSON.stringify({
-                    detail: getData
-                })
-        };
+    var formatError = function (error) {
+        var response = {
+            "statusCode": error.statusCode,
+            "headers": {
+                "Content-Type": "text/plain",
+                "x-amzn-ErrorType": error.code
+            },
+            "isBase64Encoded": false,
+            "body": error.code + ": " + error.message
+        }
+        return response
+    }
 
-        /*if (getData.Item) {
-            if (getData.Item.evn_id === evn_id) {
+    try {
+        let response = {};
+
+        const getALLEvents = await ddbDocClient.query(getAllEventsParams);
+        const getDataEvent = await ddbDocClient.get(getEventParam);
+
+        if (getDataEvent.Item) {
+            if (name === getDataEvent.Item.name) {
                 response = {
                     statusCode: 400,
                     body: JSON.stringify({
-                        title: "Bad Request",
-                        code: 400,
-                        detail: `The event with id: ${getData.Item.evn_id} is already registered.`
+                        detail: `The event with name: ${name} is already registered.`
                     })
                 };
+                return response;
             }
         } else {
-            await ddbDocClient.put(putParams);
-
-            response = {
-                statusCode: 201,
-                body: JSON.stringify({
-                    detail: `Event: ${name} with id: ${evn_id} was created successfully`
-                })
-            };
-        }*/
-
-    } catch (err) {
-        throw new Error(err.stack);
+            if (getALLEvents.Count >= 2) {
+                response = {
+                    statusCode: 400,
+                    body: JSON.stringify({
+                        detail: `User ${usr_id} cannot create more events`
+                    })
+                };
+                return response;
+            } else {
+                await ddbDocClient.put(putParams);
+                response = {
+                    statusCode: 400,
+                    body: JSON.stringify({
+                        detail: `Event: ${name} was created successfully`
+                    })
+                };
+                return response;
+            }
+        }
+    } catch (error) {
+        return formatError(error);
     }
-
-    return response;
 };

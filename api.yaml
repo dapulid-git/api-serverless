@@ -4,10 +4,19 @@ info:
   description: Serverless API
   version: 1.0.0
 
+x-amazon-apigateway-request-validators:
+  all:
+    validateRequestBody: true
+    validateRequestParameters: true
+  params-only:
+    validateRequestBody: false
+    validateRequestParameters: true
+
 paths:
   /addUser:
     post:
       summary: add user
+      x-amazon-apigateway-request-validators: "all"
       requestBody:
         description: add user body
         content:
@@ -32,14 +41,14 @@ components:
   schemas:
     RequestUserBody:
       required:
-        - id
+        - usr_id
         - name
       type: object
       properties:
-        id:
+        usr_id:
           type: string
           description: user id
-          example: "1"
+          example: "1019022364"
         name:
           type: string
           description: user name
@@ -47,7 +56,7 @@ components:
     SuccessfulResponse:
       type: object
       properties:
-        title:
+        detail:
           type: string
           description: Successful response messagge 
           example: "User created successfully"
@@ -56,5 +65,13 @@ components:
       properties:
         title:
           type: string
+          description: Bad request title response messagge 
+          example: "Bad Request"
+        code:
+          type: string
+          description: Bad request code response messagge 
+          example: 400
+        detail:
+          type: string
           description: Bad request response messagge 
-          example: "Error in message body"
+          example: "The user with id: 1019032954 is already registered."
