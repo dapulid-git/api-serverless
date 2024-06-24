@@ -140,8 +140,6 @@ Resources:
           AttributeType: S
         - AttributeName: usr_id
           AttributeType: N
-        - AttributeName: name
-          AttributeType: S
       KeySchema:
         - AttributeName: evn_id
           KeyType: HASH
