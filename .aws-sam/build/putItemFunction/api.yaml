@@ -1,0 +1,85 @@
+openapi: 3.0.3
+info:
+  title: Swagger Serverless API - OpenAPI 3.0
+  description: Serverless API
+  version: 1.0.0
+
+x-amazon-apigateway-request-validators:
+  all:
+    validateRequestBody: true
+    validateRequestParameters: true
+  params-only:
+    validateRequestBody: false
+    validateRequestParameters: true
+
+paths:
+  /addUser:
+    post:
+      summary: add user
+      x-amazon-apigateway-request-validators: "all"
+      requestBody:
+        description: add user body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestUserBody'
+        required: true
+      responses:
+        '201':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessfulResponse'          
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: "POST"
+        uri: 
+          arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path//2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:putEventFunction/invocations
+        credentials:
+          arn:${AWS::Partition}:iam::${AWS::AccountId}:role/ApiGatewayDefaultRole
+        passthroughBehaviour: "when_no_match"      
+components:
+  schemas:
+    RequestUserBody:
+      required:
+        - usr_id
+        - name
+      type: object
+      properties:
+        usr_id:
+          type: string
+          description: user id
+          example: "1019022364"
+        name:
+          type: string
+          description: user name
+          example: "David" 
+    SuccessfulResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Successful response messagge 
+          example: "User created successfully"
+    BadRequestResponse:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Bad request title response messagge 
+          example: "Bad Request"
+        code:
+          type: string
+          description: Bad request code response messagge 
+          example: 400
+        detail:
+          type: string
+          description: Bad request response messagge 
+          example: "The user with id: 1019032954 is already registered."
