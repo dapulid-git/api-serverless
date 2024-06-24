@@ -48,7 +48,7 @@ Resources:
         Api:
           Type: Api
           Properties:
-            Path: /getById/{id}
+            Path: /getById/{usr_id}
             Method: GET
 
   putItemFunction:
@@ -120,7 +120,6 @@ Resources:
             Path: /getAllEvents
             Method: GET
 
-
   UserTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -139,14 +138,14 @@ Resources:
     Properties:
       TableName: Event
       AttributeDefinitions:
-        - AttributeName: evn_id
-          AttributeType: S
         - AttributeName: usr_id
+          AttributeType: S
+        - AttributeName: name
           AttributeType: S
       KeySchema:
-        - AttributeName: evn_id
-          KeyType: HASH
         - AttributeName: usr_id
+          KeyType: HASH
+        - AttributeName: name
           KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 2
