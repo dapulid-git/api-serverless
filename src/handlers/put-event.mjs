@@ -4,9 +4,9 @@ import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 const client = new DynamoDBClient({});
 const ddbDocClient = DynamoDBDocument.from(client);
 
-const tableName = process.env.SAMPLE_TABLE;
+const tableName = process.env.EVENT_TABLE;
 
-export const putItemHandler = async (event) => {
+export const putEventHandler = async (event) => {
     if (event.httpMethod !== 'POST') {
         throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);
     }
@@ -15,7 +15,6 @@ export const putItemHandler = async (event) => {
     const id = body.id;
     const name = body.name;
     var response = {};
-
 
     var getParams = {
         TableName: tableName,
@@ -37,7 +36,7 @@ export const putItemHandler = async (event) => {
                     body: JSON.stringify({
                         title: "Bad Request",
                         code: 400,
-                        detail: `The user with id: ${getData.Item.id} is already registered.`
+                        detail: `The event with id: ${getData.Item.id} is already registered.`
                     })
                 };
             }
@@ -47,7 +46,7 @@ export const putItemHandler = async (event) => {
             response = {
                 statusCode: 201,
                 body: JSON.stringify({
-                    detail: `User: ${name} with id: ${id} was created successfully`
+                    detail: `Event: ${name} with id: ${id} was created successfully`
                 })
             };
         }
